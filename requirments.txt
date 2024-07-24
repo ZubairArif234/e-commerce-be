@@ -1,3 +1,7 @@
 Flask
 numpy
 flask-cors
+dotenv
+pymongo
+mongoengin
+bcrypt Flask-JWT-Extented
