@@ -4,11 +4,11 @@ import bcrypt
 import random
 from modals.user import User
 from config.database import db
-from flask_jwt_extended import JWTManager 
+from flask_jwt_extended import create_access_token
 from datetime import datetime , timedelta
 from flask import Blueprint, request, jsonify,session
 
-jwt2 = JWTManager()
+
 
 auth = Blueprint('auth', __name__)
 
@@ -59,7 +59,7 @@ def login():
         if not jwt_secret_key:
             raise ValueError("JWT_SECRET_KEY is not set in environment variables")
 
-        jwt_token = jwt.encode({"email":user.email}, jwt_secret_key)
+        jwt_token = create_access_token(identity={"email": user['email']})
         
         user.update(isActive=True)
         # print(user.id)
