@@ -7,5 +7,5 @@ class Product(me.Document):
     discount = me.IntField(default=0)
     shades = me.ListField()
     sizes = me.ListField()
-    # thumbnailImg = me.StringField()
+    thumbnailImg = me.StringField()
     # additionalImg = me.DictField()
