@@ -68,7 +68,6 @@ def login():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
-
 @auth.route('/email-otp', methods=['POST'])
 def emailOtp():
     try:
@@ -93,7 +92,6 @@ def emailOtp():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
-
 @auth.route('/verify-email', methods=['POST'])
 def verifyEmail():
     try:

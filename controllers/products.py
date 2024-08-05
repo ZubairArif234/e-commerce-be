@@ -12,8 +12,7 @@ myCollection = db['products']
 @product.route('/create',methods=['POST'])
 @isAuth
 def createProduct ():
-    # current_user = get_jwt_identity()
-    # print(current_user)
+   
     userDetail = session.get('user')
     print(userDetail)
     print(request.files)
@@ -43,3 +42,20 @@ def createProduct ():
         return jsonify({"message": "Product created successfully"}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@product.route('/delete/<product_id>', methods=["delete"]) 
+@isAuth
+def deleteProduct (product_id):
+    try:
+        product = Product.objects.get(id = product_id)
+        
+        if not product:
+            return jsonify({"error": "Product not found"}), 500
+            
+        product.delete()
+        return jsonify({"message": "Product deleted successfully"}), 201
+    except Exception as e:
+         return jsonify({"error": str(e)}), 500
+    
+    
+    
