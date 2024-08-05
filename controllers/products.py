@@ -27,9 +27,7 @@ def createProduct ():
             filepath=os.path.join('uploads/' , filename)
             file.save(filepath)
             thumbnailImg=filepath
-         
-       
-            
+           
         product = Product(
         name = request.form.get('name'),
         desc =request.form.get('desc'),
@@ -54,6 +52,29 @@ def deleteProduct (product_id):
             
         product.delete()
         return jsonify({"message": "Product deleted successfully"}), 201
+    except Exception as e:
+         return jsonify({"error": str(e)}), 500
+    
+@product.route('/single/<product_id>', methods=["get"]) 
+@isAuth
+def getSingleProduct (product_id):
+    try:
+        product = Product.objects.get(id = product_id)
+        
+        if not product:
+            return jsonify({"error": "Product not found"}), 500
+        
+        product_data = {
+            "id": str(product.id), 
+            "name": product.name,
+            "desc": product.desc,
+            "price": product.price,
+            "shades": product.shades,
+            "sizes": product.sizes,
+            "thumbnailImg": product.thumbnailImg  
+        }
+        
+        return jsonify({"message": "Product fetched successfully", "product": product_data}), 200  
     except Exception as e:
          return jsonify({"error": str(e)}), 500
     
