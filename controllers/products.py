@@ -41,6 +41,44 @@ def createProduct ():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
+@product.route('/update/<product_id>', methods=['PUT'])
+@isAuth
+def updateProduct(product_id):
+    try:
+        product = Product.objects.get(id=product_id)
+        
+        if not product :
+            return jsonify({"error": "Product not found"}), 404
+        
+        if 'name' in request.form:
+            product.name = request.form.get('name')
+        if 'desc' in request.form:
+            product.desc = request.form.get('desc')
+        if 'price' in request.form:
+            product.price = request.form.get('price')
+        if 'shades[]' in request.form:
+            product.shades = request.form.getlist('shades[]')
+        if 'sizes[]' in request.form:
+            product.sizes = request.form.getlist('sizes[]')
+
+        # Handle file upload if provided
+        if 'image' in request.files:
+            file = request.files['image']
+            if file.filename != '':
+               
+                filename = secure_filename(file.filename)
+                file_path = os.path.join('uploads/', filename)
+                file.save(file_path)
+                product.thumbnailImg = file_path
+
+        # Save the updated product
+        product.save()
+        return jsonify({"message": "Product updated successfully"}), 200
+
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
 @product.route('/delete/<product_id>', methods=["delete"]) 
 @isAuth
 def deleteProduct (product_id):
